@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Daltonismo: tipos, dificuldades e conscientização por meio da realidade virtual</title>
+<meta name="description" content="Trabalho de feira de ciências sobre daltonismo: tipos, dificuldades, teste dinâmico estilo Ishihara e uso de realidade virtual para conscientização.">
+<style>
+  /* ---------------------------------------------------
+     TOKENS
+  --------------------------------------------------- */
+  :root{
+    --bg: #090b0f;
+    --bg-1: #10131a;
+    --bg-2: #151922;
+    --bg-3: #1a1f2b;
+    --border: #262c39;
+    --border-soft: #1d2230;
+
+    --text: #e7eaef;
+    --text-dim: #99a2b0;
+    --text-faint: #6b7180;
+
+    --blue-50: #eef3ff;
+    --blue-300: #7ea3f5;
+    --blue-500: #3b6fed;
+    --blue-600: #2e5bd6;
+    --blue-900: #0e1a3d;
+    --blue-950: #0a1330;
+
+    --prot: #d97757;
+    --prot-bg: #1b120e;
+    --deut: #4fae7c;
+    --deut-bg: #0e1712;
+    --trit: #8f7ae0;
+    --trit-bg: #15121f;
+    --acro: #a3a3a3;
+    --acro-bg: #131313;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4.5rem;
+
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+    --shadow-md: 0 8px 24px -6px rgba(0,0,0,0.55);
+    --shadow-lg: 0 20px 50px -12px rgba(0,0,0,0.65);
+
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --dur-fast: 150ms;
+    --dur-med: 260ms;
+  }
+
+  /* ---------------------------------------------------
+     RESET
+  --------------------------------------------------- */
+  *, *::before, *::after{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *, *::before, *::after{
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    font-size: clamp(15px, 0.9vw + 12px, 17px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img, svg{ display: block; max-width: 100%; }
+
+  a{ color: var(--blue-300); text-underline-offset: 3px; }
+  a:hover{ color: var(--blue-50); }
+
+  h1, h2, h3, p, ul, figure{ margin: 0; }
+
+  :focus-visible{
+    outline: 2px solid var(--blue-300);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  ::selection{ background: var(--blue-600); color: #fff; }
+
+  /* ---------------------------------------------------
+     LAYOUT / SKIP LINK
+  --------------------------------------------------- */
+  .skip-link{
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--blue-500);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    z-index: 100;
+  }
+  .skip-link:focus{ left: var(--space-4); top: var(--space-4); }
+
+  .wrap{
+    max-width: 1040px;
+    margin-inline: auto;
+    padding-inline: clamp(1.1rem, 4vw, 2rem);
+  }
+
+  section{
+    padding-block: var(--space-8);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  section:last-of-type{ border-bottom: none; }
+
+  .eyebrow{
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue-300);
+    background: rgba(59,111,237,0.12);
+    border: 1px solid rgba(59,111,237,0.35);
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+  }
+
+  .section-head{
+    max-width: 680px;
+    margin-bottom: var(--space-6);
+  }
+
+  .section-title{
+    font-size: clamp(1.4rem, 1.1vw + 1.1rem, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-3);
+  }
+
+  .section-lead{
+    color: var(--text-dim);
+    font-size: 1rem;
+  }
+
+  /* ---------------------------------------------------
+     HERO
+  --------------------------------------------------- */
+  .hero{
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 55% at 12% -8%, rgba(59,111,237,0.35), transparent 65%),
+      radial-gradient(45% 40% at 92% 8%, rgba(59,111,237,0.16), transparent 60%),
+      linear-gradient(180deg, var(--blue-950) 0%, #0b0e15 78%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border-soft);
+    padding-block: clamp(3.2rem, 8vw, 6rem) clamp(3rem, 7vw, 4.5rem);
+  }
+
+  .hero::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(180deg, black, transparent 75%);
+    mask-image: linear-gradient(180deg, black, transparent 75%);
+    opacity: 0.5;
+  }
+
+  .hero-inner{ position: relative; max-width: 720px; }
+
+  .hero-title{
+    font-size: clamp(1.9rem, 3.4vw + 1rem, 3rem);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    margin-block: var(--space-4) var(--space-4);
+    color: #f4f6fb;
+  }
+
+  .hero-lead{
+    color: #c1cbe0;
+    font-size: clamp(1rem, 0.4vw + 0.92rem, 1.12rem);
+    max-width: 56ch;
+    margin-bottom: var(--space-6);
+  }
+
+  .hero-nav{
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hero-nav a{
+    text-decoration: none;
+    color: #e9edf9;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  }
+
+  .hero-nav a:hover{
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.28);
+    transform: translateY(-1px);
+  }
+
+  /* ---------------------------------------------------
+     TYPES GRID
+  --------------------------------------------------- */
+  .types-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .type-card{
+    --accent: var(--blue-500);
+    --accent-bg: var(--bg-2);
+    position: relative;
+    background: linear-gradient(180deg, var(--accent-bg), var(--bg-1) 75px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    transition: transform var(--dur-med) var(--ease), box-shadow var(--dur-med) var(--ease), border-color var(--dur-med) var(--ease);
+  }
+
+  .type-card::before{
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    background: var(--accent);
+  }
+
+  .type-card:hover, .type-card:focus-within{
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  }
+
+  .type-card.prot{ --accent: var(--prot); --accent-bg: var(--prot-bg); }
+  .type-card.deut{ --accent: var(--deut); --accent-bg: var(--deut-bg); }
+  .type-card.trit{ --accent: var(--trit); --accent-bg: var(--trit-bg); }
+  .type-card.acro{ --accent: var(--acro); --accent-bg: var(--acro-bg); grid-column: 1 / -1; }
+
+  .type-card-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .type-icon{
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+  }
+
+  .type-tag{
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+
+  .type-card h3{
+    font-size: 1.08rem;
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+  }
+
+  .type-card p{
+    color: var(--text-dim);
+    font-size: 0.94rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .type-card ul{
+    padding-left: 1.1rem;
+    color: var(--text-dim);
+    font-size: 0.89rem;
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .swatch-row{ display: flex; gap: 0.4rem; margin-bottom: var(--space-3); }
+  .swatch{
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* ---------------------------------------------------
+     QUIZ
+  --------------------------------------------------- */
+  .quiz-card{
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .quiz-meta{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    font-size: 0.86rem;
+    color: var(--text-dim);
+  }
+
+  .quiz-track{
+    height: 4px;
+    background: var(--bg-3);
+    border-radius: 999px;
+    overflow: hidden;
+    flex: 1;
+    margin-left: var(--space-4);
+  }
+
+  .quiz-track-fill{
+    height: 100%;
+    width: 16.66%;
+    background: var(--blue-500);
+    border-radius: 999px;
+    transition: width var(--dur-med) var(--ease);
+  }
+
+  .plate-wrap{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  @media (max-width: 560px){
+    .plate-wrap{ grid-template-columns: 1fr; justify-items: center; }
+  }
+
+  .plate-frame{
+    position: relative;
+    width: min(240px, 62vw);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: #050608;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  #plateCanvas{ width: 100%; height: 100%; display: block; }
+
+  .plate-options{
+    display: grid;
+    gap: var(--space-2);
+    min-width: 220px;
+  }
+
+  .plate-options-label{
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .opt-btn{
+    text-align: left;
+    background: var(--bg-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.65rem 0.9rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  }
+
+  .opt-btn:hover:not(:disabled){
+    border-color: var(--blue-500);
+    transform: translateX(2px);
+  }
+
+  .opt-btn:disabled{ cursor: default; }
+
+  .opt-btn[data-state="correct"]{
+    border-color: var(--deut);
+    background: color-mix(in srgb, var(--deut) 16%, var(--bg-2));
+  }
+  .opt-btn[data-state="wrong"]{
+    border-color: var(--prot);
+    background: color-mix(in srgb, var(--prot) 16%, var(--bg-2));
+  }
+
+  .quiz-controls{
+    margin-top: var(--space-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .btn{
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 1.15rem;
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+  }
+  .btn:active:not(:disabled){ transform: translateY(1px); }
+
+  .btn-primary{ background: var(--blue-500); color: #fff; border: 1px solid var(--blue-500); }
+  .btn-primary:hover:not(:disabled){ background: var(--blue-600); }
+  .btn-primary:disabled{ opacity: 0.45; cursor: not-allowed; }
+
+  .btn-ghost{ background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+  .btn-ghost:hover{ color: var(--text); border-color: var(--blue-500); }
+
+  .quiz-result{
+    margin-top: var(--space-5);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--bg-2);
+    display: none;
+    font-size: 0.95rem;
+  }
+  .quiz-result.show{ display: block; }
+
+  .quiz-disclaimer{
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    margin-top: var(--space-4);
+  }
+
+  /* ---------------------------------------------------
+     PROJETO / CAMPOS EDITÁVEIS
+  --------------------------------------------------- */
+  .field-grid{
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .field-block h3{
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--blue-300);
+    margin-bottom: var(--space-2);
+  }
+
+  .editable{
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue-500);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    font-size: 0.97rem;
+    min-height: 1.6em;
+    outline: none;
+    transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  }
+
+  .editable:hover{ border-color: color-mix(in srgb, var(--blue-500) 55%, var(--border)); }
+  .editable:focus{ background: var(--bg-2); border-color: var(--blue-500); }
+
+  .editable[data-placeholder]:empty::before{
+    content: attr(data-placeholder);
+    color: var(--text-faint);
+  }
+
+  .chip-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .chip-list li{
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue-500);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 0.9rem;
+    outline: none;
+    font-size: 0.95rem;
+    transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  }
+  .chip-list li:hover{ border-color: color-mix(in srgb, var(--blue-500) 55%, var(--border)); }
+  .chip-list li:focus{ background: var(--bg-2); border-color: var(--blue-500); }
+
+  .chip-list li[data-placeholder]:empty::before{
+    content: attr(data-placeholder);
+    color: var(--text-faint);
+  }
+
+  .add-btn{
+    margin-top: var(--space-3);
+    background: transparent;
+    border: 1px dashed var(--border);
+    color: var(--text-dim);
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  }
+  .add-btn:hover{ color: var(--text); border-color: var(--blue-500); }
+
+  footer{
+    text-align: center;
+    padding: var(--space-6) var(--space-4) var(--space-7);
+    color: var(--text-faint);
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <span class="eyebrow">Trabalho de feira de ciências</span>
+    <h1 class="hero-title">Daltonismo: tipos, dificuldades e conscientização por meio da realidade virtual</h1>
+    <p class="hero-lead">
+      Este site reúne o material do nosso projeto: uma explicação dos principais tipos de daltonismo,
+      um teste dinâmico inspirado nas placas de Ishihara e o registro da metodologia usada com óculos
+      de realidade virtual para simular, na prática, as dificuldades de quem enxerga as cores de forma diferente.
+    </p>
+    <nav class="hero-nav" aria-label="Navegação da página">
+      <a href="#tipos">Tipos de daltonismo</a>
+      <a href="#teste">Teste dinâmico</a>
+      <a href="#projeto">Sobre o projeto</a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+  <div class="wrap">
+
+    <section id="tipos" aria-labelledby="tipos-title">
+      <div class="section-head">
+        <h2 class="section-title" id="tipos-title">Tipos de daltonismo</h2>
+        <p class="section-lead">
+          O daltonismo acontece quando um ou mais tipos de cones da retina — as células responsáveis por
+          captar as cores — funcionam de forma diferente ou não funcionam. Dependendo de qual cone é afetado
+          e do quanto ele é afetado, o resultado é um tipo diferente de dificuldade para enxergar cores.
+        </p>
+      </div>
+
+      <div class="types-grid">
+
+        <article class="type-card prot" aria-labelledby="prot-title">
+          <div class="type-card-head">
+            <span class="type-tag">Cone L afetado</span>
+          </div>
+          <h3 id="prot-title">Protanopia e Protanomalia</h3>
+          <p>
+            Afetam a percepção do vermelho. Na protanopia, o cone sensível ao vermelho (L) está ausente;
+            na protanomalia, ele funciona, mas de forma alterada. O vermelho pode parecer mais escuro e
+            se confundir com tons de verde e marrom.
+          </p>
+          <div class="swatch-row" role="img" aria-label="Amostras de cor: vermelho escurecido, verde oliva, marrom escuro">
+            <span class="swatch" style="background:#b23a2f"></span>
+            <span class="swatch" style="background:#6b6b2f"></span>
+            <span class="swatch" style="background:#4a3a1f"></span>
+          </div>
+          <ul>
+            <li>Confusão entre vermelho e verde escuro</li>
+            <li>Sinais vermelhos parecem apagados</li>
+          </ul>
+        </article>
+
+        <article class="type-card deut" aria-labelledby="deut-title">
+          <div class="type-card-head">
+            <span class="type-tag">Cone M afetado</span>
+          </div>
+          <h3 id="deut-title">Deuteranopia e Deuteranomalia</h3>
+          <p>
+            Afetam a percepção do verde. É o tipo mais comum de daltonismo. Na deuteranopia o cone M está
+            ausente; na deuteranomalia ele está presente, mas alterado. Verde e vermelho tendem a se misturar
+            em tons acastanhados.
+          </p>
+          <div class="swatch-row" role="img" aria-label="Amostras de cor: tons acastanhados de verde e vermelho misturados">
+            <span class="swatch" style="background:#8a7a2f"></span>
+            <span class="swatch" style="background:#7a6a3a"></span>
+            <span class="swatch" style="background:#5f5030"></span>
+          </div>
+          <ul>
+            <li>Dificuldade em distinguir verde e vermelho</li>
+            <li>Tons pastéis parecem esmaecidos</li>
+          </ul>
+        </article>
+
+        <article class="type-card trit" aria-labelledby="trit-title">
+          <div class="type-card-head">
+            <span class="type-tag">Cone S afetado</span>
+          </div>
+          <h3 id="trit-title">Tritanopia</h3>
+          <p>
+            Afeta a percepção do azul. É bem mais rara que os tipos anteriores. O cone sensível ao azul (S)
+            está ausente ou alterado, causando confusão entre azul e verde, e entre amarelo e vermelho claro.
+          </p>
+          <div class="swatch-row" role="img" aria-label="Amostras de cor: verde azulado, roxo acinzentado, amarelo dourado">
+            <span class="swatch" style="background:#3f7a6a"></span>
+            <span class="swatch" style="background:#6a5f8a"></span>
+            <span class="swatch" style="background:#c9a45f"></span>
+          </div>
+          <ul>
+            <li>Azul pode parecer verde</li>
+            <li>Amarelo pode parecer rosa claro</li>
+          </ul>
+        </article>
+
+        <article class="type-card acro" aria-labelledby="acro-title">
+          <div class="type-card-head">
+            <span class="type-tag">Sem percepção de cor</span>
+          </div>
+          <h3 id="acro-title">Acromatopsia</h3>
+          <p>
+            Forma rara e mais severa, em que a pessoa enxerga o mundo em tons de cinza, preto e branco,
+            já que dois ou os três tipos de cone não funcionam. Costuma vir acompanhada de sensibilidade
+            intensa à luz e baixa acuidade visual.
+          </p>
+          <div class="swatch-row" role="img" aria-label="Amostras de cor: tons de cinza escuro, médio e claro">
+            <span class="swatch" style="background:#3a3a3a"></span>
+            <span class="swatch" style="background:#7a7a7a"></span>
+            <span class="swatch" style="background:#bdbdbd"></span>
+          </div>
+          <ul>
+            <li>Visão totalmente em escala de cinza</li>
+            <li>Forte incômodo com luz clara (fotofobia)</li>
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="teste" aria-labelledby="teste-title">
+      <div class="section-head">
+        <h2 class="section-title" id="teste-title">Teste dinâmico de percepção de cores</h2>
+        <p class="section-lead">
+          As placas abaixo são geradas pelo próprio código da página, no estilo do teste de Ishihara: um número
+          formado por pontos de uma cor, espalhado entre pontos de outra cor. Escolha, em cada placa, o número
+          que você consegue enxergar. Ao final, mostramos um resultado aproximado — não é um diagnóstico médico.
+        </p>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-meta">
+          <span id="quizProgress" aria-live="polite">Placa 1 de 6</span>
+          <div class="quiz-track" aria-hidden="true">
+            <div class="quiz-track-fill" id="quizTrackFill"></div>
+          </div>
+        </div>
+
+        <div class="plate-wrap">
+          <div class="plate-frame">
+            <canvas id="plateCanvas" width="280" height="280" role="img" aria-label="Placa de teste com pontos coloridos formando um número"></canvas>
+          </div>
+          <div class="plate-options" id="plateOptions" role="radiogroup" aria-labelledby="plateOptionsLabel">
+            <p class="plate-options-label" id="plateOptionsLabel">Qual número você vê na placa?</p>
+            <!-- botões inseridos via JS -->
+          </div>
+        </div>
+
+        <div class="quiz-controls">
+          <button class="btn btn-primary" id="nextBtn" type="button" disabled>Próxima placa</button>
+          <button class="btn btn-ghost" id="restartBtn" type="button">Reiniciar teste</button>
+        </div>
+
+        <div class="quiz-result" id="quizResult" aria-live="polite"></div>
+
+        <p class="quiz-disclaimer">
+          Este teste foi construído para fins educativos, com poucas placas e sem validação clínica.
+          Um diagnóstico real de daltonismo só pode ser feito por um oftalmologista.
+        </p>
+      </div>
+    </section>
+
+    <section id="projeto" aria-labelledby="projeto-title">
+      <div class="section-head">
+        <h2 class="section-title" id="projeto-title">Sobre o projeto</h2>
+        <p class="section-lead">
+          Campos abaixo podem ser clicados e editados diretamente na página para preencher com as informações
+          finais do grupo.
+        </p>
+      </div>
+
+      <div class="field-grid">
+
+        <div class="field-block">
+          <h3 id="obj-label">Objetivo</h3>
+          <div class="editable" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="obj-label" data-placeholder="Escreva o objetivo do trabalho...">Investigar os diferentes tipos de daltonismo (protanopia/protanomalia, deuteranopia/deuteranomalia, tritanopia e acromatopsia) e suas causas, e utilizar óculos de realidade virtual como ferramenta de conscientização, permitindo que pessoas de visão normal experimentem, mesmo que de forma simulada, as dificuldades enfrentadas por pessoas daltônicas no dia a dia.</div>
+        </div>
+
+        <div class="field-block">
+          <h3 id="met-label">Metodologia</h3>
+          <div class="editable" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="met-label" data-placeholder="Descreva a metodologia utilizada...">O trabalho foi dividido em três etapas. Na primeira, foi feita uma revisão bibliográfica sobre os tipos de daltonismo, suas causas e as principais dificuldades relatadas por pessoas daltônicas. Na segunda etapa, foi montado um teste digital inspirado nas placas de Ishihara para identificar, de forma simples, possíveis sinais de daltonismo entre os participantes. Na terceira etapa, foram utilizados óculos de realidade virtual com um aplicativo de simulação de deficiência de percepção de cores, para que colegas e visitantes pudessem "experimentar" por alguns minutos como enxergam pessoas com diferentes tipos de daltonismo em situações do cotidiano (sinais de trânsito, gráficos, roupas, alimentos). Após a experiência, os participantes responderam a um pequeno relato sobre o que perceberam.</div>
+        </div>
+
+        <div class="field-block">
+          <h3 id="mat-label">Materiais utilizados</h3>
+          <div class="editable" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="mat-label" data-placeholder="Liste os materiais utilizados...">Óculos de realidade virtual (RV), smartphone/computador com aplicativo de simulação de daltonismo, placas de teste no estilo Ishihara (impressas e digitais), notebook para apresentação do site, cartolina e formulário impresso para coleta dos relatos dos participantes.</div>
+        </div>
+
+        <div class="field-block">
+          <h3 id="conc-label">Conclusão</h3>
+          <div class="editable" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="conc-label" data-placeholder="Escreva a conclusão do trabalho...">Esperava-se que a experiência com os óculos de realidade virtual gerasse maior empatia e compreensão sobre as dificuldades enfrentadas por pessoas daltônicas em situações comuns, como interpretar sinais de trânsito, gráficos escolares ou embalagens de produtos. Os relatos dos participantes confirmaram essa expectativa: a maioria descreveu dificuldade em distinguir cores que antes pareciam óbvias, reforçando a importância de pensar em ambientes e materiais mais acessíveis (uso de contraste, texturas e símbolos, e não apenas cores, para transmitir informação). O projeto mostrou que ferramentas de simulação, como a realidade virtual, podem ser recursos eficientes de conscientização, complementando o conhecimento teórico com uma vivência prática.</div>
+        </div>
+
+        <div class="field-block">
+          <h3 id="mem-label">Integrantes do grupo</h3>
+          <ul class="chip-list" id="membersList" aria-labelledby="mem-label">
+            <li contenteditable="true" data-placeholder="Nome do integrante"></li>
+          </ul>
+          <button class="add-btn" id="addMember" type="button">+ adicionar integrante</button>
+        </div>
+
+        <div class="field-block">
+          <h3 id="src-label">Fontes e referências</h3>
+          <ul class="chip-list" id="sourcesList" aria-labelledby="src-label">
+            <li contenteditable="true">ISHIHARA, S. Tests for Colour-Blindness. Tokyo: Kanehara Shuppan, 1917.</li>
+            <li contenteditable="true">Colour Blind Awareness — colourblindawareness.org</li>
+            <li contenteditable="true" data-placeholder="Adicione outra fonte..."></li>
+          </ul>
+          <button class="add-btn" id="addSource" type="button">+ adicionar fonte</button>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  Trabalho de feira de ciências — Daltonismo, tipos, dificuldades e conscientização por meio da realidade virtual.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------------------------------------------
+     Geração das placas estilo Ishihara
+  --------------------------------------------------- */
+
+  function buildDigitMask(digit, size){
+    const off = document.createElement('canvas');
+    off.width = size; off.height = size;
+    const octx = off.getContext('2d');
+    octx.clearRect(0, 0, size, size);
+    octx.fillStyle = '#fff';
+    octx.font = 'bold ' + Math.floor(size * 0.68) + 'px Arial';
+    octx.textAlign = 'center';
+    octx.textBaseline = 'middle';
+    octx.fillText(String(digit), size / 2, size / 2 + size * 0.03);
+    return octx.getImageData(0, 0, size, size);
+  }
+
+  function isInsideMask(mask, x, y, size){
+    if (x < 0 || y < 0 || x >= size || y >= size) return false;
+    return mask.data[(y * size + x) * 4 + 3] > 120;
+  }
+
+  function drawPlate(canvas, figureDigit, figureColors, groundColors){
+    const size = canvas.width;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, size, size);
+
+    const mask = buildDigitMask(figureDigit, size);
+    const radius = size / 2;
+    const cx = size / 2, cy = size / 2;
+    const dotCount = 850;
+
+    for (let i = 0; i < dotCount; i++){
+      const angle = Math.random() * Math.PI * 2;
+      const dist = Math.sqrt(Math.random()) * (radius - 6);
+      const x = cx + Math.cos(angle) * dist;
+      const y = cy + Math.sin(angle) * dist;
+      const r = 3 + Math.random() * 5.5;
+
+      const inside = isInsideMask(mask, Math.round(x), Math.round(y), size);
+      const palette = inside ? figureColors : groundColors;
+      const color = palette[Math.floor(Math.random() * palette.length)];
+
+      ctx.beginPath();
+      ctx.fillStyle = color;
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  const PALETTES = {
+    redOnGreen:    { figure: ['#d1673b','#c9713f','#e08a4f','#b95a2e'], ground: ['#7f9b5b','#8aa966','#6f8b4f','#94ab6f'] },
+    greenOnRed:    { figure: ['#8aa966','#94ab6f','#7f9b5b','#a3b87d'], ground: ['#c9713f','#d1673b','#b95a2e','#e08a4f'] },
+    orangeOnBrown: { figure: ['#e0a24f','#d99a3d','#eaad5c'],           ground: ['#8a6b4a','#7a5c3e','#9a7a54'] },
+    blueOnYellow:  { figure: ['#5f8ad1','#4f7bc4','#6f96da'],           ground: ['#d8c15a','#cdb64f','#e2ca66'] }
+  };
+
+  const PLATE_DEFS = [
+    { digit: 12, palette: 'redOnGreen',    options: [12, 17, 21, 0] },
+    { digit: 8,  palette: 'greenOnRed',    options: [8, 3, 6, 0] },
+    { digit: 29, palette: 'redOnGreen',    options: [29, 70, 26, 0] },
+    { digit: 5,  palette: 'orangeOnBrown', options: [5, 2, 8, 0] },
+    { digit: 74, palette: 'blueOnYellow',  options: [74, 21, 71, 0] },
+    { digit: 6,  palette: 'greenOnRed',    options: [6, 5, 0, 8] }
+  ];
+
+  let current = 0;
+  let correctCount = 0;
+  let answered = false;
+
+  const canvas = document.getElementById('plateCanvas');
+  const optionsBox = document.getElementById('plateOptions');
+  const optionsLabel = document.getElementById('plateOptionsLabel');
+  const progressEl = document.getElementById('quizProgress');
+  const trackFill = document.getElementById('quizTrackFill');
+  const nextBtn = document.getElementById('nextBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const resultBox = document.getElementById('quizResult');
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function loadPlate(i){
+    answered = false;
+    nextBtn.disabled = true;
+    resultBox.classList.remove('show');
+    resultBox.innerHTML = '';
+
+    const def = PLATE_DEFS[i];
+    const pal = PALETTES[def.palette];
+    drawPlate(canvas, def.digit, pal.figure, pal.ground);
+
+    progressEl.textContent = 'Placa ' + (i + 1) + ' de ' + PLATE_DEFS.length;
+    trackFill.style.width = (((i + 1) / PLATE_DEFS.length) * 100) + '%';
+
+    optionsBox.innerHTML = '';
+    optionsBox.appendChild(optionsLabel);
+
+    const opts = shuffle(def.options);
+    opts.forEach(function(opt){
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.type = 'button';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-checked', 'false');
+      btn.textContent = (opt === 0) ? 'Não consigo ver nenhum número' : String(opt);
+
+      btn.addEventListener('click', function(){
+        if (answered) return;
+        answered = true;
+        const isCorrect = (opt === def.digit);
+        if (isCorrect) correctCount++;
+        btn.dataset.state = isCorrect ? 'correct' : 'wrong';
+        btn.setAttribute('aria-checked', 'true');
+
+        optionsBox.querySelectorAll('.opt-btn').forEach(function(b){ b.disabled = true; });
+        nextBtn.disabled = false;
+        nextBtn.focus();
+      });
+
+      optionsBox.appendChild(btn);
+    });
+  }
+
+  function showResult(){
+    const total = PLATE_DEFS.length;
+    let msg;
+    if (correctCount === total){
+      msg = 'Você acertou ' + correctCount + ' de ' + total + ' placas. Isso é compatível com uma percepção de cores típica.';
+    } else if (correctCount >= total - 2){
+      msg = 'Você acertou ' + correctCount + ' de ' + total + ' placas. Pequenas trocas podem acontecer com qualquer pessoa (iluminação da tela, monitor, etc.), mas se você errou consistentemente placas de um mesmo tipo, vale conversar com um oftalmologista.';
+    } else {
+      msg = 'Você acertou ' + correctCount + ' de ' + total + ' placas. Esse padrão de respostas é parecido com o de pessoas com alguma dificuldade de percepção de cores. Isso não é um diagnóstico — para confirmar, procure um oftalmologista.';
+    }
+    resultBox.innerHTML = '<strong>Resultado:</strong> ' + msg;
+    resultBox.classList.add('show');
+  }
+
+  nextBtn.addEventListener('click', function(){
+    current++;
+    if (current < PLATE_DEFS.length){
+      loadPlate(current);
+    } else {
+      optionsBox.innerHTML = '';
+      optionsLabel.textContent = 'Teste concluído.';
+      optionsBox.appendChild(optionsLabel);
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      nextBtn.disabled = true;
+      showResult();
+    }
+  });
+
+  restartBtn.addEventListener('click', function(){
+    current = 0;
+    correctCount = 0;
+    optionsLabel.textContent = 'Qual número você vê na placa?';
+    loadPlate(current);
+  });
+
+  loadPlate(current);
+
+  /* ---------------------------------------------------
+     Listas editáveis (integrantes / fontes)
+  --------------------------------------------------- */
+
+  function addListItem(listId, placeholder){
+    const li = document.createElement('li');
+    li.contentEditable = 'true';
+    li.setAttribute('data-placeholder', placeholder);
+    document.getElementById(listId).appendChild(li);
+    li.focus();
+  }
+
+  document.getElementById('addMember').addEventListener('click', function(){
+    addListItem('membersList', 'Nome do integrante');
+  });
+
+  document.getElementById('addSource').addEventListener('click', function(){
+    addListItem('sourcesList', 'Adicione outra fonte...');
+  });
+
+})();
+</script>
+
+</body>
+</html>
